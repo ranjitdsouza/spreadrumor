@@ -15,8 +15,6 @@
         }
 
         .nav {
-            /* background: linear-gradient(to top, rgba(223, 223, 223, 0.12), rgba(0, 0, 0, 0.57)); */
-
             color: white;
             padding: 14px 10px;
             text-align: left;
@@ -34,7 +32,6 @@
 
         .nav .explore-btn {
             float: right;
-
         }
 
         .nav .explore-btn button {
@@ -104,6 +101,7 @@
             height: 50%;
             background: linear-gradient(to top, rgba(0, 0, 0, 0.4), rgba(223, 223, 223, 0.12));
             backdrop-filter: blur(3px);
+            pointer-events: none;
         }
 
         .search {
@@ -114,6 +112,7 @@
             color: white;
             border-radius: 12px;
             font-size: 0.8em;
+            pointer-events: auto;
         }
 
         .search .current-location {
@@ -126,13 +125,12 @@
             font-size: 1em;
         }
 
-
         .search-range {
             margin-top: -12px;
             margin-left: 10px;
             margin-right: 10px;
             padding: 1px 3px;
-            color: black;
+            color: white;
             border-radius: 12px;
         }
 
@@ -151,102 +149,51 @@
             display: none !important;
         }
 
-        /* Permission dialog styles */
-        .permission-dialog {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
-            max-width: 350px;
-            width: 90%;
-            text-align: center;
-            display: none;
-        }
-
-        .permission-dialog h3 {
-            margin: 0 0 15px 0;
-            color: #333;
-        }
-
-        .permission-dialog p {
-            margin: 0 0 20px 0;
-            color: #666;
-            line-height: 1.5;
-            font-size: 14px;
-        }
-
-        .permission-btn {
-            background: #49a565;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            margin: 5px;
-            width: 90%;
-            max-width: 250px;
-        }
-
-        .permission-btn:hover {
-            background: #21c23c;
-        }
-
-        .permission-btn.secondary {
-            background: #6c757d;
-        }
-
-        .permission-btn.secondary:hover {
-            background: #545b62;
-        }
-
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-            display: none;
-        }
-
-        .instructions {
-            font-size: 12px;
-            color: #888;
-            margin-top: 15px;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 5px;
-        }
-
         .location-status {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(26, 26, 26, 0.9);
-            padding: 8px 12px;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(26, 26, 26, 0.95);
+            color: white;
+            padding: 10px 16px;
             border-radius: 8px;
-            font-size: 12px;
+            font-size: 13px;
             z-index: 100;
             display: none;
+            max-width: 90%;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
         .retry-btn {
             background: #ff6b6b;
             color: white;
             border: none;
-            padding: 8px 16px;
+            padding: 6px 14px;
             border-radius: 6px;
             cursor: pointer;
             font-size: 12px;
-            margin-top: 5px;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
         }
     </style>
 </head>
@@ -264,28 +211,14 @@
         <div class="search">
             <label class="current-location">Getting your location...</label>
             on
-            <label class="date-time">12th Dec, 2025</label>
+            <label class="date-time" id="dateTime">12th Dec, 2025</label>
         </div>
         <div class="search-range">
             <h2>Near Me</h2>
         </div>
-
-    </div>
-
-    <!-- Permission Request Dialog -->
-    <div class="overlay" id="overlay"></div>
-    <div class="permission-dialog" id="permissionDialog">
-        <h3>Location Access Required</h3>
-        <p>This app needs access to your location to show you on the map and provide location-based services.</p>
-        <div class="instructions">
-            <strong>For Mobile Users:</strong> Make sure location services are enabled and try again.
-        </div>
-        <button class="permission-btn" id="requestPermission">Allow Location Access</button>
-        <button class="permission-btn secondary" id="skipLocation">Skip for Now</button>
     </div>
 
     <script>
-
         // Replace with your Mapbox access token
         mapboxgl.accessToken = 'pk.eyJ1IjoicmFuaml0ZHNvdXphIiwiYSI6ImNtaWdzMXB0ZzAxNnMzZnIxeWh1dWEwaXcifQ.BgmVhDYzaRLB8LgXKNFqJQ';
 
@@ -294,12 +227,17 @@
         let geolocateControl;
         let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
+        // Set current date
+        function setCurrentDate() {
+            const now = new Date();
+            const options = { day: 'numeric', month: 'short', year: 'numeric' };
+            const dateStr = now.toLocaleDateString('en-US', options);
+            document.getElementById('dateTime').textContent = dateStr;
+        }
+
         // Initialize map
         function initializeMap() {
-            // Create map with default location first
             createMap([73.8567, 18.5204]);
-
-            // Then check location permission
             setTimeout(() => {
                 checkLocationPermission();
             }, 1000);
@@ -308,115 +246,81 @@
         // Check location permission status
         async function checkLocationPermission() {
             if (!navigator.geolocation) {
-                showPermissionDialog('Geolocation is not supported by this browser.');
+                showLocationStatus('Geolocation is not supported by this browser.', 'error');
                 return;
             }
 
-            showLocationStatus('Checking location permissions...');
+            showLocationStatus('Checking location permissions...', 'loading');
 
             try {
-                // Check if permission is already granted using Permissions API
                 if (navigator.permissions && navigator.permissions.query) {
                     const permissionStatus = await navigator.permissions.query({ name: 'geolocation' });
 
                     if (permissionStatus.state === 'granted') {
-                        // Permission already granted - get location directly without showing dialog
                         showLocationStatus('Location permission granted', 'success');
                         getCurrentLocation();
                         return;
                     } else if (permissionStatus.state === 'denied') {
-                        // Permission denied - show dialog
-                        showPermissionDialog('Location access was previously denied. Please enable it in your browser settings.');
+                        showLocationStatus('Location access was previously denied. Please enable it in your browser settings.', 'error');
                         return;
                     }
-                    // If prompt state, continue to normal flow
                 }
 
-                // For mobile devices or when permission state is 'prompt'
                 if (isMobile) {
-                    showPermissionDialog('Tap "Allow Location Access" to enable location services.');
+                    showLocationStatus('Tap "Allow Location Access" to enable location services.', 'info');
                 } else {
-                    // For desktop, try to get location directly (will trigger prompt if needed)
                     getCurrentLocation();
                 }
             } catch (error) {
                 console.log('Permission check failed, using fallback:', error);
-                // Fallback for browsers that don't support Permissions API
                 if (isMobile) {
-                    showPermissionDialog('Tap "Allow Location Access" to enable location services.');
+                    showLocationStatus('Tap "Allow Location Access" to enable location services.', 'info');
                 } else {
                     getCurrentLocation();
                 }
             }
-        }
-
-        // Show permission request dialog
-        function showPermissionDialog(message = null) {
-            const dialog = document.getElementById('permissionDialog');
-            const overlay = document.getElementById('overlay');
-            const requestBtn = document.getElementById('requestPermission');
-            const skipBtn = document.getElementById('skipLocation');
-
-            if (message) {
-                const mainParagraph = dialog.querySelector('p');
-                if (mainParagraph) {
-                    mainParagraph.textContent = message;
-                }
-            }
-
-            dialog.style.display = 'block';
-            overlay.style.display = 'block';
-
-            // Request permission when button is clicked
-            requestBtn.onclick = function () {
-                hidePermissionDialog();
-                getCurrentLocationWithRetry();
-            };
-
-            // Skip location when button is clicked
-            skipBtn.onclick = function () {
-                hidePermissionDialog();
-                updateLocationText(18.5204, 73.8567, 'Pune, India');
-                showLocationStatus('Using default location', 'info');
-            };
-        }
-
-        // Hide permission dialog
-        function hidePermissionDialog() {
-            document.getElementById('permissionDialog').style.display = 'none';
-            document.getElementById('overlay').style.display = 'none';
         }
 
         // Show location status
         function showLocationStatus(message, type = 'info') {
             const statusElement = document.getElementById('locationStatus');
-            statusElement.textContent = message;
+
+            // Add loading spinner for loading state
+            if (type === 'loading') {
+                statusElement.innerHTML = '<span class="loading-spinner"></span>' + message;
+            } else {
+                statusElement.textContent = message;
+            }
+
             statusElement.style.display = 'block';
 
             if (type === 'error') {
-                statusElement.style.background = 'rgba(255, 107, 107, 0.9)';
+                statusElement.style.background = 'rgba(255, 107, 107, 0.95)';
                 statusElement.style.color = 'white';
 
-                // Add retry button for errors
                 if (!statusElement.querySelector('.retry-btn')) {
                     const retryBtn = document.createElement('button');
                     retryBtn.className = 'retry-btn';
                     retryBtn.textContent = 'Retry';
                     retryBtn.onclick = getCurrentLocationWithRetry;
+                    statusElement.appendChild(document.createElement('br'));
                     statusElement.appendChild(retryBtn);
                 }
-            } else {
-                statusElement.style.background = 'rgba(255, 255, 255, 0.9)';
-                statusElement.style.color = '#333';
-
-                // Remove retry button if exists
+            } else if (type === 'success') {
+                statusElement.style.background = 'rgba(76, 175, 80, 0.95)';
+                statusElement.style.color = 'white';
                 const retryBtn = statusElement.querySelector('.retry-btn');
-                if (retryBtn) {
-                    retryBtn.remove();
-                }
+                if (retryBtn) retryBtn.remove();
+            } else if (type === 'loading') {
+                statusElement.style.background = 'rgba(33, 150, 243, 0.95)';
+                statusElement.style.color = 'white';
+            } else {
+                statusElement.style.background = 'rgba(26, 26, 26, 0.95)';
+                statusElement.style.color = 'white';
+                const retryBtn = statusElement.querySelector('.retry-btn');
+                if (retryBtn) retryBtn.remove();
             }
 
-            // Auto-hide success messages after 3 seconds
             if (type === 'success') {
                 setTimeout(() => {
                     statusElement.style.display = 'none';
@@ -426,7 +330,7 @@
 
         // Get current location with retry logic
         function getCurrentLocationWithRetry() {
-            showLocationStatus('Getting your location...');
+            showLocationStatus('Getting your location...', 'loading');
 
             const options = {
                 enableHighAccuracy: true,
@@ -440,15 +344,10 @@
                     const longitude = position.coords.longitude;
                     const accuracy = position.coords.accuracy;
 
-                    showLocationStatus(`Location found (accuracy: ${Math.round(accuracy)}m)`, 'success');
-
-                    // Update location text
+                    showLocationStatus(`Location found (±${Math.round(accuracy)}m)`, 'success');
                     updateLocationText(latitude, longitude);
-
-                    // Update map with user's location
                     updateMapLocation([longitude, latitude]);
 
-                    // Trigger the geolocate control if available
                     if (geolocateControl) {
                         setTimeout(() => {
                             geolocateControl.trigger();
@@ -460,22 +359,19 @@
 
                     switch (error.code) {
                         case error.PERMISSION_DENIED:
-                            errorMessage = 'Location access denied. Please enable location permissions in your browser settings.';
-                            showPermissionDialog(errorMessage);
+                            errorMessage = 'Location access denied. Please enable location permissions.';
                             break;
                         case error.POSITION_UNAVAILABLE:
-                            errorMessage = 'Location information unavailable. Please check your device location settings.';
-                            showLocationStatus(errorMessage, 'error');
+                            errorMessage = 'Location information unavailable. Check your device settings.';
                             break;
                         case error.TIMEOUT:
                             errorMessage = 'Location request timed out. Please try again.';
-                            showLocationStatus(errorMessage, 'error');
                             break;
                         default:
                             errorMessage = 'Failed to get location. Please try again.';
-                            showLocationStatus(errorMessage, 'error');
                     }
 
+                    showLocationStatus(errorMessage, 'error');
                     console.error('Geolocation error:', error);
                 },
                 options
@@ -484,7 +380,7 @@
 
         // Get user's current location
         function getCurrentLocation() {
-            showLocationStatus('Getting your location...');
+            showLocationStatus('Getting your location...', 'loading');
 
             const options = {
                 enableHighAccuracy: true,
@@ -498,20 +394,14 @@
                     const longitude = position.coords.longitude;
 
                     showLocationStatus('Location found!', 'success');
-
-                    // Update location text
                     updateLocationText(latitude, longitude);
-
-                    // Update map with user's location
                     updateMapLocation([longitude, latitude]);
                 },
                 function (error) {
-                    // If permission is denied on desktop, show dialog
                     if (error.code === error.PERMISSION_DENIED) {
-                        showPermissionDialog('Location access was denied. Please allow location access.');
+                        showLocationStatus('Location access denied. Please allow location access.', 'error');
                     } else {
-                        // For other errors, show default location
-                        showLocationStatus('Using default location', 'info');
+                        showLocationStatus('Using default location (Pune)', 'info');
                         updateLocationText(18.5204, 73.8567, 'Pune, India');
                     }
                 },
@@ -523,14 +413,12 @@
         function updateLocationText(latitude, longitude, fallbackText = 'Your Location') {
             const locationElement = document.querySelector('.current-location');
 
-            // Simple reverse geocoding using Mapbox
             fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${mapboxgl.accessToken}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.features && data.features.length > 0) {
-                        // Get the most relevant place name
                         const place = data.features[0].place_name;
-                        locationElement.textContent = place.split(',')[0]; // Get first part (usually locality)
+                        locationElement.textContent = place.split(',')[0];
                     } else {
                         locationElement.textContent = fallbackText;
                     }
@@ -540,18 +428,80 @@
                 });
         }
 
-        // Create map with specified center
-
-        // mapbox://styles/mapbox/navigation-night-v1
+        // Create map with specified center - FIXED VERSION
         function createMap(center) {
+            try {
+                // Your custom style URL
+                const customStyleURL = 'mapbox://styles/ranjitdsouza/cmijtzilg00lr01qwf2ri04jb';
+
+                console.log('Initializing map with custom style...');
+
+                map = new mapboxgl.Map({
+                    container: 'map',
+                    style: 'mapbox://styles/standard/style-v11', // Start with standard style
+                    center: [center[0], center[1]],
+                    zoom: 13,
+                    pitch: 60,
+                    bearing: 12.8,
+                    attributionControl: false,
+                    failIfMajorPerformanceCaveat: false
+                });
+
+                // Handle when map is ready (use 'load' instead of 'style.load')
+                map.on('load', function () {
+                    console.log('Map loaded successfully!');
+                    setupMapControls(center);
+                });
+
+                // Handle style data event (fires when style is loaded)
+                map.on('styledata', function () {
+                    console.log('Style data loaded');
+                });
+
+                // Handle errors
+                map.on('error', function (e) {
+                    console.error('Map error:', e.error);
+
+                    // If custom style fails, switch to fallback
+                    if (e.error && e.error.status === 404) {
+                        console.log('Custom style not found, using fallback...');
+                        switchToFallbackStyle(center);
+                    }
+                });
+
+            } catch (error) {
+                console.error('Map initialization error:', error);
+                showLocationStatus('Map initialization failed. Trying fallback...', 'error');
+                switchToFallbackStyle(center);
+            }
+        }
+
+        // Switch to fallback style if custom style fails
+        function switchToFallbackStyle(center) {
+            if (map) {
+                map.remove();
+            }
+
+            console.log('Loading fallback style...');
+
             map = new mapboxgl.Map({
                 container: 'map',
-                style: 'mapbox://styles/mapbox/dark-v11',
+                style: 'mapbox://styles/ranjitdsouza/cmijtzilg00lr01qwf2ri04jb', // Fallback to dark theme
                 center: center,
                 zoom: 13,
-                attributionControl: false // Disable attribution control
+                pitch: 60,
+                bearing: 12.8,
+                attributionControl: false
             });
 
+            map.on('load', function () {
+                console.log('Fallback map loaded successfully!');
+                setupMapControls(center);
+            });
+        }
+
+        // Setup map controls (extracted to separate function)
+        function setupMapControls(center) {
             // Add navigation controls
             map.addControl(new mapboxgl.NavigationControl());
 
@@ -567,7 +517,7 @@
 
             map.addControl(geolocateControl);
 
-            // Add user marker for default location
+            // Add default marker
             addDefaultMarker(center);
 
             // Listen for geolocate events
@@ -576,12 +526,9 @@
                 const latitude = e.coords.latitude;
                 updateLocationText(latitude, longitude);
                 showLocationStatus('Location updated!', 'success');
-
-                // Update marker position when user location is found
                 updateMapLocation([longitude, latitude]);
             });
 
-            // Handle geolocate errors
             geolocateControl.on('error', function (e) {
                 console.error('Geolocate control error:', e);
                 showLocationStatus('Location error: ' + (e.message || 'Unknown error'), 'error');
@@ -603,16 +550,13 @@
 
         // Update map with user's location
         function updateMapLocation(coordinates) {
-            // Remove existing user marker if it exists
             if (userMarker) {
                 userMarker.remove();
             }
 
-            // Create new marker element
             const el = document.createElement('div');
             el.className = 'user-marker';
 
-            // Add marker at correct coordinates
             userMarker = new mapboxgl.Marker({
                 element: el,
                 anchor: 'center'
@@ -620,19 +564,19 @@
                 .setLngLat(coordinates)
                 .addTo(map);
 
-            // Calculate offset to position user marker higher on screen (above bottom box)
             const offsetY = 0.002;
 
-            // Fly to location with offset to position marker higher on screen
             map.flyTo({
                 center: [coordinates[0], coordinates[1] - offsetY],
                 zoom: 15,
+                pitch: 60,
                 essential: true
             });
         }
 
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', function () {
+            setCurrentDate();
             initializeMap();
         });
     </script>
