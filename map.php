@@ -15,7 +15,7 @@
         }
 
         .nav {
-            background: linear-gradient(to top, rgba(223, 223, 223, 0.12), rgba(0, 0, 0, 0.57));
+            /* background: linear-gradient(to top, rgba(223, 223, 223, 0.12), rgba(0, 0, 0, 0.57)); */
 
             color: white;
             padding: 14px 10px;
@@ -101,7 +101,7 @@
             position: absolute;
             bottom: 0;
             width: 100%;
-            height: 57%;
+            height: 50%;
             background: linear-gradient(to top, rgba(0, 0, 0, 0.4), rgba(223, 223, 223, 0.12));
             backdrop-filter: blur(3px);
         }
@@ -285,6 +285,7 @@
     </div>
 
     <script>
+
         // Replace with your Mapbox access token
         mapboxgl.accessToken = 'pk.eyJ1IjoicmFuaml0ZHNvdXphIiwiYSI6ImNtaWdzMXB0ZzAxNnMzZnIxeWh1dWEwaXcifQ.BgmVhDYzaRLB8LgXKNFqJQ';
 
@@ -540,10 +541,12 @@
         }
 
         // Create map with specified center
+
+        // mapbox://styles/mapbox/navigation-night-v1
         function createMap(center) {
             map = new mapboxgl.Map({
                 container: 'map',
-                style: 'mapbox://styles/mapbox/streets-v12',
+                style: 'mapbox://styles/mapbox/dark-v11',
                 center: center,
                 zoom: 13,
                 attributionControl: false // Disable attribution control
