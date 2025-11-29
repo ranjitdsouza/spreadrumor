@@ -227,33 +227,36 @@
         }
 
         function triggerHapticFeedback(pattern = 200) {
-            if (navigator.vibrate) {
-                // Mobile: Use vibration
-                const success = navigator.vibrate(pattern);
-                if (success) {
-                    showStatus('✅ Vibration triggered', 'mobile');
-                } else {
-                    showStatus('❌ Vibration not supported', 'desktop');
-                    playBeep();
+            // Check if device supports vibration
+            if ('vibrate' in navigator) {
+                // Mobile/tablet: Use vibration only
+                try {
+                    const success = navigator.vibrate(pattern);
+                    if (success) {
+                        showStatus('✅ Vibration triggered', 'mobile');
+                        return; // Exit - don't play sound
+                    }
+                } catch (error) {
+                    console.error('Vibration failed:', error);
+                }
+            }
+            
+            // Desktop or vibration failed: Use audio feedback
+            if (Array.isArray(pattern)) {
+                // Play pattern as sequence of beeps
+                let delay = 0;
+                for (let i = 0; i < pattern.length; i += 2) {
+                    const duration = pattern[i] / 1000;
+                    const pause = pattern[i + 1] ? pattern[i + 1] / 1000 : 0;
+                    setTimeout(() => {
+                        playBeep(800, duration, 0.3);
+                    }, delay * 1000);
+                    delay += duration + pause;
                 }
             } else {
-                // Desktop: Play beep sound
-                if (Array.isArray(pattern)) {
-                    // Play pattern as sequence of beeps
-                    let delay = 0;
-                    for (let i = 0; i < pattern.length; i += 2) {
-                        const duration = pattern[i] / 1000;
-                        const pause = pattern[i + 1] ? pattern[i + 1] / 1000 : 0;
-                        setTimeout(() => {
-                            playBeep(800, duration, 0.3);
-                        }, delay * 1000);
-                        delay += duration + pause;
-                    }
-                } else {
-                    playBeep(800, pattern / 1000, 0.3);
-                }
-                showStatus('🔊 Audio feedback played', 'desktop');
+                playBeep(800, pattern / 1000, 0.3);
             }
+            showStatus('🔊 Audio feedback played', 'desktop');
         }
 
         // Single pulse button
