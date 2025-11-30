@@ -125,11 +125,11 @@
             left: 50%;
             transform: translateX(-50%);
             bottom: 0;
-            width: 99%;
+            width: 100%;
             height: 50%;
-            backdrop-filter: blur(6.4px);
-            border-radius: 32px;
-            border: 1px solid #bd2424ff;
+            backdrop-filter: blur(6.40px);
+            border-radius: 32px 32px 0 0;
+            /* border: 1px solid #bd2424ff; */
             background: rgba(235, 235, 235, 0.60);
             box-shadow: 0 -2px 12.6px 0 rgba(144, 144, 158, 0.50);
             display: flex;
@@ -149,10 +149,10 @@
             height: 28px;
             padding: 8px 24px;
             border-radius: 24px;
-            background: rgba(226, 224, 224, 0.77);
-            /* box-shadow: -4px -4px 8.2px 0 #FFF, 4px 4px 19.1px 0 rgba(0, 0, 0, 0.22); */
+            background: rgba(255, 255, 255, 0.10);
+            box-shadow: -4px -4px 8px 0 #FFF, 4px 4px 19px 0 rgba(255, 42, 0, 0.20);
             color: #606060;
-            border: 1px solid orange;
+            /* border: 1px solid orange; */
             font-family: "Open Sans";
             /* font-size: 14px; */
             /* font-weight: 600; */
