@@ -314,10 +314,10 @@
 
     <script>
 
-        function enableLocationChange() {
-            const changeLocation = document.getElementById('search');
-            changeLocation.style.display = 'none';
-        }
+        // function enableLocationChange() {
+        //     const changeLocation = document.getElementById('search');
+        //     changeLocation.style.display = 'none';
+        // }
 
 
 
