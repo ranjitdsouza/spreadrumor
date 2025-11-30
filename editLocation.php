@@ -249,7 +249,7 @@
         }
 
         .editPanel {
-
+            width: 100%;
             height: 100%;
             border: 1px solid #44b9fdff;
             /* border-radius: 16px; */
@@ -298,7 +298,14 @@
         <div class="editSearch" id="search" onclick="enableLocationChange()">
             <div class="editPanel">
                 <label id="dateLabel">Date</label>
-                <input type="date" id="dateInput" name="dateInput" value="<?php echo date('d-m-Y'); ?>">
+                <input type="date" id="dateInput" name="dateInput" value="">
+                <script>
+                    window.onload = function () {
+                        const dateInput = document.getElementById('dateInput');
+                        const today = new Date().toISOString().split('T')[0];
+                        dateInput.value = today;
+                    };
+                </script>
             </div>
         </div>
 
@@ -315,6 +322,12 @@
     <div class="location-status" id="locationStatus"></div>
 
     <script>
+
+        window.onload = function () {
+            const dateInput = document.getElementById('dateInput');
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.value = today;
+        };
 
         // function enableLocationChange() {
         //     const changeLocation = document.getElementById('search');
