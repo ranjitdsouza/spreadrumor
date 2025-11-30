@@ -129,7 +129,7 @@
             height: 50%;
             backdrop-filter: blur(6.4px);
             border-radius: 32px;
-            border: 1px solid #DADADA;
+            border: 1px solid #bd2424ff;
             background: rgba(235, 235, 235, 0.60);
             box-shadow: 0 -2px 12.6px 0 rgba(144, 144, 158, 0.50);
             display: flex;
@@ -145,17 +145,19 @@
             flex-direction: row;
             align-items: center;
             justify-content: space-between;
-            width: 338px;
-            height: 48px;
+            width: 83%;
+            height: 28px;
             padding: 8px 24px;
-            border-radius: 54px;
-            background: rgba(226, 224, 224, 0.14);
-            box-shadow: -4px -4px 8.2px 0 #FFF, 4px 4px 19.1px 0 rgba(0, 0, 0, 0.22);
+            border-radius: 24px;
+            background: rgba(226, 224, 224, 0.77);
+            /* box-shadow: -4px -4px 8.2px 0 #FFF, 4px 4px 19.1px 0 rgba(0, 0, 0, 0.22); */
             color: #606060;
+            border: 1px solid orange;
             font-family: "Open Sans";
             /* font-size: 14px; */
             /* font-weight: 600; */
             margin-bottom: 8px;
+
         }
 
         .current-location {
@@ -175,6 +177,7 @@
             margin-left: 8px;
             font-weight: 400;
             /* background-color: #3d3333ff; */
+
         }
 
         .date-time {
@@ -235,10 +238,15 @@
             style="background-color: #B9B9B9; width: 126px; height: 4px; border-radius: 4px; margin-bottom: 8px;"></span>
 
         <div class="search">
-            <span class="current-location" id="currentLocation"><span>on</span></span>
+            <span class="current-location" id="currentLocation">Location<span>on</span></span>
 
             <span class="date-time" id="dateTime">12th Dec</span>
         </div>
+        <!-- 
+        <img src="search.jpeg" alt="Drag Handle"
+            style="margin-top: -63px; margin-bottom: 4px; width: 100%; z-index: 1000; !important;  pointer-events: none; opacity: 0.2;"> -->
+
+
         <div class="results">
             <span class="aval-event">
                 Available Events
