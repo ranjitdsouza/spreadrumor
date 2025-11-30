@@ -298,7 +298,7 @@
         <div class="editSearch" id="search" onclick="enableLocationChange()">
             <div class="editPanel">
                 <label id="dateLabel">Date</label>
-                <input type="date" id="dateInput" name="dateInput" value="">
+                <input type="date" id="dateInput" name="dateInput" value="<?php echo date('d-m-Y'); ?>">
             </div>
         </div>
 
