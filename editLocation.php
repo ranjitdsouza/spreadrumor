@@ -274,6 +274,8 @@
             font-size: 16px;
             height: 17px;
             background-color: white;
+            border: none;
+            border-radius: 8px;
         }
     </style>
 </head>
@@ -303,9 +305,9 @@
 
 
     </div>
-
+    <!-- 
     <img src="edit.jpeg" alt="Edit Location"
-        style="margin-top: 372px; width: 100%; z-index: 1 !important;  pointer-events: none; opacity: 0.3;">
+        style="margin-top: 372px; width: 100%; z-index: 1 !important;  pointer-events: none; opacity: 0.3;"> -->
 
 
 
