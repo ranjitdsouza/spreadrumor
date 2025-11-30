@@ -2,330 +2,74 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Haptic Feedback Button</title>
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+        rel="stylesheet">
+
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        body{
+            font-family: 'Open Sans', sans-serif;
         }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        div{
             display: flex;
-            justify-content: center;
+            flex-direction: row;
             align-items: center;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 20px;
+            justify-content: space-between;
+            width: 338px;
+            height: 48px;
+            padding: 8px 24px;
+            border-radius: 54px;
+            background: rgba(204, 19, 19, 0.473);
+            box-shadow: -4px -4px 8.2px 0 #FFF, 4px 4px 19.1px 0 rgba(0, 0, 0, 0.22);
+            color: #606060;
+            font-family: "Open Sans";
+            /* font-size: 14px; */
+            /* font-weight: 600; */
+            margin-bottom: 8px;
         }
 
-        .container {
-            text-align: center;
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 400px;
-            width: 100%;
-        }
+        div .current-location {
+           
 
-        h1 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 24px;
-        }
-
-        .description {
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 14px;
-            line-height: 1.6;
-        }
-
-        .btn-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        button {
-            padding: 16px 32px;
-            font-size: 16px;
-            font-weight: 600;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
+            text-overflow: ellipsis;
             overflow: hidden;
+            white-space: nowrap;
+        }
+        div .current-location span {
+            color: #4d4d4d;
+            margin-left: 8px;
+            font-weight: 400;
+        
+        }
+        div .date-time {
+            
+            text-align: right;
+            font-weight: 600;
+            color: #606060;
         }
 
-        #vibrateBtn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        }
+        div span{  height: 19px; }
 
-        #vibrateBtn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-        }
-
-        #vibrateBtn:active {
-            transform: scale(0.95);
-        }
-
-        #patternBtn {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
-        }
-
-        #patternBtn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.6);
-        }
-
-        #patternBtn:active {
-            transform: scale(0.95);
-        }
-
-        .status {
-            margin-top: 20px;
-            padding: 12px;
-            border-radius: 8px;
+        .current-location, .date-time, .current-location span {
+            background-color: rgb(164, 241, 149);
             font-size: 14px;
-            font-weight: 500;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .status.show {
-            opacity: 1;
-        }
-
-        .status.mobile {
-            background: #e8f5e9;
-            color: #2e7d32;
-        }
-
-        .status.desktop {
-            background: #e3f2fd;
-            color: #1565c0;
-        }
-
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.6);
-            transform: scale(0);
-            animation: ripple-animation 0.6s ease-out;
-            pointer-events: none;
-        }
-
-        @keyframes ripple-animation {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
-
-        .icon {
-            display: inline-block;
-            margin-right: 8px;
+           
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🎯 Haptic Feedback Demo</h1>
-        <p class="description">
-            <strong>iPhone/Safari:</strong> iOS doesn't support vibration API, but you'll get tactile audio feedback.<br>
-            <strong>Android:</strong> Full vibration support.<br>
-            <strong>Desktop:</strong> Audio beep feedback.
-        </p>
-        
-        <div class="btn-container">
-            <button id="vibrateBtn">
-                <span class="icon">📳</span>
-                Single Pulse
-            </button>
-            <button id="patternBtn">
-                <span class="icon">🎵</span>
-                Pattern Vibration
-            </button>
+    <center>
+        <div>
+            <span class="current-location">Getting your location <span>on</span></span>
+
+            <span class="date-time" id="dateTime">12th Dec</span>
         </div>
-        
-        <div id="status" class="status"></div>
-    </div>
+    </center>
 
-    <script>
-        const statusEl = document.getElementById('status');
-        
-        // Detect device type
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        
-        // Show initial status
-        let statusMessage = '💻 Desktop detected - Audio feedback enabled';
-        let statusType = 'desktop';
-        
-        if (isIOS) {
-            statusMessage = '📱 iPhone/iPad detected - Limited vibration support';
-            statusType = 'mobile';
-        } else if (isMobile && 'vibrate' in navigator) {
-            statusMessage = '📱 Mobile device detected - Haptic feedback enabled';
-            statusType = 'mobile';
-        }
-        
-        showStatus(statusMessage, statusType);
-
-        function showStatus(message, type) {
-            statusEl.textContent = message;
-            statusEl.className = `status ${type} show`;
-            setTimeout(() => {
-                statusEl.classList.remove('show');
-            }, 3000);
-        }
-
-        function createRipple(event) {
-            const button = event.currentTarget;
-            const ripple = document.createElement('span');
-            const rect = button.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            const x = event.clientX - rect.left - size / 2;
-            const y = event.clientY - rect.top - size / 2;
-
-            ripple.style.width = ripple.style.height = `${size}px`;
-            ripple.style.left = `${x}px`;
-            ripple.style.top = `${y}px`;
-            ripple.classList.add('ripple');
-
-            button.appendChild(ripple);
-
-            setTimeout(() => {
-                ripple.remove();
-            }, 600);
-        }
-
-        function playBeep(frequency = 800, duration = 0.2, volume = 0.3) {
-            try {
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                const oscillator = audioContext.createOscillator();
-                const gainNode = audioContext.createGain();
-                
-                oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
-                
-                oscillator.frequency.value = frequency;
-                oscillator.type = 'sine';
-                
-                gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
-                
-                oscillator.start(audioContext.currentTime);
-                oscillator.stop(audioContext.currentTime + duration);
-                
-                // Clean up
-                setTimeout(() => {
-                    audioContext.close();
-                }, duration * 1000 + 100);
-            } catch (error) {
-                console.error('Audio playback failed:', error);
-            }
-        }
-
-        function triggerHapticFeedback(pattern = 200) {
-            let feedbackTriggered = false;
-            
-            // For iOS devices - Safari doesn't support Vibration API well
-            if (isIOS) {
-                // Try to use a silent audio trick for iOS haptic
-                try {
-                    // Create a very short, low-volume click sound
-                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    const oscillator = audioContext.createOscillator();
-                    const gainNode = audioContext.createGain();
-                    
-                    oscillator.connect(gainNode);
-                    gainNode.connect(audioContext.destination);
-                    
-                    oscillator.frequency.value = 1000;
-                    oscillator.type = 'sine';
-                    
-                    // Very short burst to simulate haptic
-                    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.05);
-                    
-                    oscillator.start(audioContext.currentTime);
-                    oscillator.stop(audioContext.currentTime + 0.05);
-                    
-                    setTimeout(() => audioContext.close(), 100);
-                    
-                    showStatus('📳 Haptic-like feedback (iOS)', 'mobile');
-                    feedbackTriggered = true;
-                } catch (error) {
-                    console.error('iOS haptic simulation failed:', error);
-                }
-            }
-            
-            // For Android and other mobile devices with Vibration API
-            if (!feedbackTriggered && 'vibrate' in navigator) {
-                try {
-                    const success = navigator.vibrate(pattern);
-                    if (success) {
-                        showStatus('✅ Vibration triggered', 'mobile');
-                        feedbackTriggered = true;
-                    }
-                } catch (error) {
-                    console.error('Vibration failed:', error);
-                }
-            }
-            
-            // Fallback to audio for desktop or if all else fails
-            if (!feedbackTriggered) {
-                if (Array.isArray(pattern)) {
-                    // Play pattern as sequence of beeps
-                    let delay = 0;
-                    for (let i = 0; i < pattern.length; i += 2) {
-                        const duration = pattern[i] / 1000;
-                        const pause = pattern[i + 1] ? pattern[i + 1] / 1000 : 0;
-                        setTimeout(() => {
-                            playBeep(800, duration, 0.3);
-                        }, delay * 1000);
-                        delay += duration + pause;
-                    }
-                } else {
-                    playBeep(800, pattern / 1000, 0.3);
-                }
-                showStatus('🔊 Audio feedback played', 'desktop');
-            }
-        }
-
-        // Single pulse button
-        document.getElementById('vibrateBtn').addEventListener('click', function(e) {
-            createRipple(e);
-            triggerHapticFeedback(200);
-        });
-
-        // Pattern vibration button
-        document.getElementById('patternBtn').addEventListener('click', function(e) {
-            createRipple(e);
-            // Pattern: vibrate 100ms, pause 50ms, vibrate 100ms, pause 50ms, vibrate 200ms
-            triggerHapticFeedback([100, 50, 100, 50, 200]);
-        });
-
-        // Prevent double-tap zoom on mobile
-        let lastTouchEnd = 0;
-        document.addEventListener('touchend', function(event) {
-            const now = Date.now();
-            if (now - lastTouchEnd <= 300) {
-                event.preventDefault();
-            }
-            lastTouchEnd = now;
-        }, false);
-    </script>
 </body>
 </html>

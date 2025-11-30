@@ -206,7 +206,7 @@
         </span>
     </div>
     <div id="map"></div>
-    <div class="location-status" id="locationStatus"></div>
+
     <div class="bottom-box">
         <div class="search">
             <label class="current-location">Getting your location...</label>
