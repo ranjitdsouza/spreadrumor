@@ -170,14 +170,21 @@
             font-weight: 600;
             color: #606060;
             flex: 1;
+            max-width: 72%;
+
+
         }
 
-        .current-location span {
-            color: #4d4d4d;
-            margin-left: 8px;
-            font-weight: 400;
-            /* background-color: #3d3333ff; */
 
+        .current-location {
+            position: relative;
+        }
+
+        .on {
+            font-size: 12px;
+            font-weight: 400;
+            color: #808080;
+            margin-right: 4px;
         }
 
         .date-time {
@@ -187,6 +194,7 @@
             font-weight: 600;
             color: #606060;
             flex-shrink: 0;
+
         }
 
         .results {
@@ -238,9 +246,11 @@
             style="background-color: #B9B9B9; width: 126px; height: 4px; border-radius: 4px; margin-bottom: 8px;"></span>
 
         <div class="search">
-            <span class="current-location" id="currentLocation">Location<span>on</span></span>
+            <span class="current-location" id="currentLocation">Swargate, Pune, Maharashtra, India</span>
 
-            <span class="date-time" id="dateTime">12th Dec</span>
+            <span class="date-time" id="dateTime">
+                <span class="on" style="">on</span>
+                12th Dec</span>
         </div>
         <!-- 
         <img src="search.jpeg" alt="Drag Handle"
