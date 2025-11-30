@@ -156,7 +156,7 @@
             font-family: "Open Sans";
             /* font-size: 14px; */
             /* font-weight: 600; */
-            margin-bottom: 16px;
+            margin-bottom: 8px;
 
         }
 
@@ -229,6 +229,52 @@
         .mapboxgl-ctrl-geolocate {
             display: none !important;
         }
+
+        .editSearch {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 84%;
+            height: 192px;
+            padding: 24px;
+            border-radius: 24px;
+            background: rgba(228, 228, 228, 0.97);
+            box-shadow: -4px -4px 8px 0 #FFF, 4px 4px 19px 0 rgba(255, 42, 0, 0.20);
+            color: #606060;
+            /* border: 1px solid orange; */
+            font-family: "Open Sans";
+            /* font-size: 14px; */
+            /* font-weight: 600; */
+            margin-bottom: 8px;
+        }
+
+        .editPanel {
+
+            height: 100%;
+            border: 1px solid #44b9fdff;
+            /* border-radius: 16px; */
+        }
+
+        .editPanel #dateLabel {
+            font-size: 14px;
+            font-weight: 600;
+            color: #606060;
+            left: 0;
+            float: left;
+            text-align: left;
+            margin-top: 7px;
+        }
+
+        .editPanel input[type="date"] {
+
+            right: 0;
+            float: right;
+            border: 1px solid #ccc;
+            padding: 8px;
+            font-size: 16px;
+            height: 17px;
+            background-color: white;
+        }
     </style>
 </head>
 
@@ -241,37 +287,41 @@
 
     <div class="bottom-box">
 
+        <!-- Height adjustable bar -->
         <span
             style="background-color: #B9B9B9; width: 126px; height: 4px; border-radius: 4px; margin-bottom: 8px;"></span>
 
-        <div class="search">
-            <span class="current-location" id="currentLocation">Swargate, Pune, Maharashtra, India</span>
+        <!-- Search area -->
 
-            <span class="date-time" id="dateTime">
-                <span class="on" style="">on</span>
-                12th Dec</span>
+        <div class="editSearch" id="search" onclick="enableLocationChange()">
+            <div class="editPanel">
+                <label id="dateLabel">Date</label>
+                <input type="date" id="dateInput" name="dateInput" value="">
+            </div>
         </div>
-        <!-- 
-        <img src="search.jpeg" alt="Drag Handle"
-            style="margin-top: -63px; margin-bottom: 4px; width: 100%; z-index: 1000; !important;  pointer-events: none; opacity: 0.2;"> -->
 
 
-        <div class="results">
-            <span class="aval-event">
-                Available Events
-            </span>
 
-            <span class="result-count">
-                10 Results
-            </span>
-        </div>
     </div>
+
+    <img src="edit.jpeg" alt="Edit Location"
+        style="margin-top: 372px; width: 100%; z-index: 1 !important;  pointer-events: none; opacity: 0.3;">
+
 
 
     <!-- Status Message -->
     <div class="location-status" id="locationStatus"></div>
 
     <script>
+
+        function enableLocationChange() {
+            const changeLocation = document.getElementById('search');
+            changeLocation.style.display = 'none';
+        }
+
+
+
+
         mapboxgl.accessToken = 'pk.eyJ1IjoicmFuaml0ZHNvdXphIiwiYSI6ImNtaWdzMXB0ZzAxNnMzZnIxeWh1dWEwaXcifQ.BgmVhDYzaRLB8LgXKNFqJQ';
 
         let map;
@@ -282,9 +332,9 @@
             // Initialize map with default location
             map = new mapboxgl.Map({
                 container: 'map',
-                zoom: 16.8,
+                zoom: 12,
                 center: [24.951528, 60.169573],
-                pitch: 74,
+                pitch: 14,
                 bearing: 12.8,
                 hash: true,
                 style: 'mapbox://styles/ranjitdsouza/cmijtzilg00lr01qwf2ri04jb'
@@ -480,6 +530,10 @@
                 navigator.geolocation.clearWatch(watchId);
             }
         });
+
+
+
+
     </script>
 
 </body>
