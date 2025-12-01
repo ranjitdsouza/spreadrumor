@@ -230,22 +230,65 @@
             display: none !important;
         }
 
+
+
         .editSearch {
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            width: 84%;
+            width: 83%;
             height: 192px;
             padding: 24px;
             border-radius: 24px;
-            background: rgba(228, 228, 228, 0.97);
+            background: rgba(228, 228, 228, 0.15);
             box-shadow: -4px -4px 8px 0 #FFF, 4px 4px 19px 0 rgba(255, 42, 0, 0.20);
             color: #606060;
             /* border: 1px solid orange; */
             font-family: "Open Sans";
             /* font-size: 14px; */
             /* font-weight: 600; */
-            margin-bottom: 8px;
+
+            margin: auto;
+            margin-top: -5px;
+            display: none;
+        }
+
+        @keyframes slideDownExpand {
+            from {
+
+                opacity: 0;
+                max-height: 0;
+                margin-top: 61px;
+            }
+
+            to {
+
+                opacity: 1;
+                max-height: 300px;
+            }
+        }
+
+        .editSearch {
+            animation: slideDownExpand 0.4s ease-out forwards;
+            transform-origin: top;
+        }
+
+        .editSearch.hide {
+            animation: slideDownCollapse 0.3s ease-in forwards;
+        }
+
+        @keyframes slideDownCollapse {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+                max-height: 300px;
+            }
+
+            to {
+                transform: translateY(-100%);
+                opacity: 0;
+                max-height: 0;
+            }
         }
 
         .editPanel {
@@ -270,13 +313,14 @@
             right: 0;
             float: right;
             border: 1px solid #ccc;
-            padding: 8px 2px;
-            font-size: 16px;
+            padding: 8px;
+            font-size: 14px;
             height: 17px;
             background-color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             text-align: center;
+            font-family: 'Open Sans', sans-serif;
         }
 
         input[type="date"]::-webkit-calendar-picker-indicator {
@@ -292,27 +336,48 @@
     </div>
     <div id="map"></div>
 
-    <div class="bottom-box">
-
+    <div class="bottom-box" id="searchBox">
         <!-- Height adjustable bar -->
         <span
             style="background-color: #B9B9B9; width: 126px; height: 4px; border-radius: 4px; margin-bottom: 8px;"></span>
 
-        <!-- Search area -->
+        <div class="search" id="currentSearch" onclick="openEditPanel()">
+            <span class="current-location" id="currentLocation">Swargate, Pune, Maharashtra, India</span>
 
-        <div class="editSearch" id="search" onclick="enableLocationChange()">
+            <span class="date-time" id="dateTime">
+                <span class="on" style="">on</span>
+                12th Dec</span>
+        </div>
+
+        <!-- Height adjustable bar -->
+
+        <!-- Search area -->
+        <div class="editSearch" id="editSearch">
             <div class="editPanel">
                 <label id="dateLabel">Date</label>
                 <input type="date" id="dateInput" name="dateInput" value="">
-                <script>
-                    window.onload = function () {
-                        const dateInput = document.getElementById('dateInput');
-                        const today = new Date().toISOString().split('T')[0];
-                        dateInput.value = today;
-                    };
-                </script>
             </div>
         </div>
+
+        <!-- 
+              <img src="search.jpeg" alt="Drag Handle"
+            style="margin-top: -63px; margin-bottom: 4px; width: 100%; z-index: 1000; !important;  pointer-events: none; opacity: 0.2;"> -->
+
+
+        <div class="results">
+            <span class="aval-event">
+                Available Events
+            </span>
+            <span class="result-count">
+                10 Results
+            </span>
+        </div>
+    </div>
+
+
+    </div>
+    <!-- Search area -->
+
 
 
 
@@ -325,236 +390,7 @@
 
     <!-- Status Message -->
     <div class="location-status" id="locationStatus"></div>
-
-    <script>
-
-        window.onload = function () {
-            const dateInput = document.getElementById('dateInput');
-            const today = new Date().toISOString().split('T')[0];
-            dateInput.value = today;
-        };
-
-        // function enableLocationChange() {
-        //     const changeLocation = document.getElementById('search');
-        //     changeLocation.style.display = 'none';
-        // }
-
-
-
-
-        mapboxgl.accessToken = 'pk.eyJ1IjoicmFuaml0ZHNvdXphIiwiYSI6ImNtaWdzMXB0ZzAxNnMzZnIxeWh1dWEwaXcifQ.BgmVhDYzaRLB8LgXKNFqJQ';
-
-        let map;
-        let userMarker;
-        let watchId;
-
-        window.onload = () => {
-            // Initialize map with default location
-            map = new mapboxgl.Map({
-                container: 'map',
-                zoom: 12,
-                center: [24.951528, 60.169573],
-                pitch: 14,
-                bearing: 12.8,
-                hash: true,
-                style: 'mapbox://styles/ranjitdsouza/cmijtzilg00lr01qwf2ri04jb'
-            });
-
-            // Wait for map to load
-            map.on('load', function () {
-                console.log('Map loaded successfully');
-
-                // Automatically get user location on load
-                setTimeout(() => {
-                    getUserLocation();
-                }, 1000);
-            });
-
-            // Add click event to location button
-            document.getElementById('locationBtn').addEventListener('click', getUserLocation);
-        };
-
-
-        function getCurrentLocation() {
-            showLocationStatus('Getting your location...', 'loading');
-
-            const options = {
-                enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 60000
-            };
-
-            navigator.geolocation.getCurrentPosition(
-                function (position) {
-                    const latitude = position.coords.latitude;
-                    const longitude = position.coords.longitude;
-
-                    showLocationStatus('Location found!', 'success');
-                    updateLocationText(latitude, longitude);
-                    updateMapLocation([longitude, latitude]);
-                },
-                function (error) {
-                    if (error.code === error.PERMISSION_DENIED) {
-                        showLocationStatus('Location access denied. Please allow location access.', 'error');
-                    } else {
-                        showLocationStatus('Using default location (Pune)', 'info');
-                        updateLocationText(18.5204, 73.8567, 'Pune, India');
-                    }
-                },
-                options
-            );
-        }
-
-        // Show status message
-        function showStatus(message, type = 'info') {
-            const statusEl = document.getElementById('locationStatus');
-            statusEl.textContent = message;
-            statusEl.className = 'location-status show ' + type;
-
-            // Auto-hide success messages
-            if (type === 'success') {
-                setTimeout(() => {
-                    statusEl.classList.remove('show');
-                }, 3000);
-            }
-        }
-
-        // Get user's current location
-        function getUserLocation() {
-            if (!navigator.geolocation) {
-                showStatus('Geolocation is not supported by your browser', 'error');
-                return;
-            }
-
-            showStatus('Getting your location...', 'loading');
-
-            const options = {
-                enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 0
-            };
-
-            navigator.geolocation.getCurrentPosition(
-                // Success callback
-                function (position) {
-                    const longitude = position.coords.longitude;
-                    const latitude = position.coords.latitude;
-                    const accuracy = position.coords.accuracy;
-
-                    console.log('Location found:', latitude, longitude);
-                    showStatus(`Location found (±${Math.round(accuracy)}m)`, 'success');
-
-                    // Update or create marker
-                    updateUserMarker(longitude, latitude);
-
-                    // Calculate offset to position marker above bottom box
-                    // Bottom box is 50% height, so we offset upward to show marker in visible area
-                    const offsetLatitude = -0.003; // Negative moves map down, marker appears higher
-
-                    // Fly to user's location with offset
-                    map.flyTo({
-                        center: [longitude, latitude + offsetLatitude],
-                        zoom: 16,
-                        pitch: 45,
-                        bearing: 0,
-                        essential: true,
-                        duration: 2000
-                    });
-
-                    // Optional: Start tracking user location
-                    startTracking();
-                },
-                // Error callback
-                function (error) {
-                    let errorMessage = '';
-
-                    switch (error.code) {
-                        case error.PERMISSION_DENIED:
-                            errorMessage = 'Location access denied. Please enable location permissions.';
-                            break;
-                        case error.POSITION_UNAVAILABLE:
-                            errorMessage = 'Location information unavailable.';
-                            break;
-                        case error.TIMEOUT:
-                            errorMessage = 'Location request timed out.';
-                            break;
-                        default:
-                            errorMessage = 'An unknown error occurred.';
-                    }
-
-                    console.error('Geolocation error:', error);
-                    showStatus(errorMessage, 'error');
-                },
-                options
-            );
-        }
-
-        // REPLACING DEFAULT MARKER WITH CUSTOM MARKER
-        function updateUserMarker(longitude, latitude) {
-            // Remove existing marker if it exists
-            if (userMarker) {
-                userMarker.remove();
-            }
-
-            // Create custom marker element
-            const el = document.createElement('div');
-            el.className = 'user-marker';
-
-            // Create new marker
-            userMarker = new mapboxgl.Marker({
-                element: el,
-                anchor: 'center'
-            })
-                .setLngLat([longitude, latitude])
-                .addTo(map);
-
-            console.log('Marker updated at:', longitude, latitude);
-        }
-
-        // Start tracking user location (optional - updates marker as user moves)
-        function startTracking() {
-            // Stop existing tracking if any
-            if (watchId) {
-                navigator.geolocation.clearWatch(watchId);
-            }
-
-            const options = {
-                enableHighAccuracy: true,
-                timeout: 5000,
-                maximumAge: 0
-            };
-
-            // Watch position for continuous updates
-            watchId = navigator.geolocation.watchPosition(
-                function (position) {
-                    const longitude = position.coords.longitude;
-                    const latitude = position.coords.latitude;
-
-                    // Update marker position smoothly
-                    if (userMarker) {
-                        userMarker.setLngLat([longitude, latitude]);
-                    }
-
-                    console.log('Location updated:', latitude, longitude);
-                },
-                function (error) {
-                    console.error('Tracking error:', error);
-                },
-                options
-            );
-        }
-
-        // Stop tracking when page unloads
-        window.addEventListener('beforeunload', function () {
-            if (watchId) {
-                navigator.geolocation.clearWatch(watchId);
-            }
-        });
-
-
-
-
-    </script>
+    <script src="mapPage.js"></script>
 
 </body>
 
