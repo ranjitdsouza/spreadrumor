@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Styled Date Input</title>
+  <style>
+    input[type="date"] {
+      appearance: none; /* Removes default styling */
+      border: 2px solid #4CAF50;
+      border-radius: 5px;
+      padding: 10px;
+      font-size: 16px;
+      color: #333;
+    }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+}
+  </style>
+</head>
+<body>
+  <label for="date">Select a date:</label>
+  <input type="date" id="date">
+</body>
+</html>

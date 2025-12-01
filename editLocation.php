@@ -270,12 +270,17 @@
             right: 0;
             float: right;
             border: 1px solid #ccc;
-            padding: 8px;
+            padding: 8px 2px;
             font-size: 16px;
             height: 17px;
             background-color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            display: none;
         }
     </style>
 </head>
