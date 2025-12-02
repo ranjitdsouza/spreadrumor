@@ -6,7 +6,7 @@ function openEditPanel() {
     document.getElementById('currentSearch').style.display = 'none';
     document.getElementById('editSearch').style.display = 'block';
 }
-
+openEditPanel();
 
 
 mapboxgl.accessToken = 'pk.eyJ1IjoicmFuaml0ZHNvdXphIiwiYSI6ImNtaWdzMXB0ZzAxNnMzZnIxeWh1dWEwaXcifQ.BgmVhDYzaRLB8LgXKNFqJQ';

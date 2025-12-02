@@ -5,12 +5,21 @@
     <meta charset="utf-8">
     <title>User Location Map</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <!-- Material Icons -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=search" />
+
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
         rel="stylesheet">
+
+    <!-- Mapbox -->
     <link href="https://api.mapbox.com/mapbox-gl-js/v3.17.0-beta.1/mapbox-gl.css" rel="stylesheet">
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.17.0-beta.1/mapbox-gl.js"></script>
+
     <style>
         body {
             margin: 0;
@@ -201,7 +210,7 @@
             flex-direction: row;
             align-items: center;
             justify-content: space-between;
-            width: 358px;
+            width: 83%;
             background-color: transparent;
             padding: 0 8px;
         }
@@ -231,7 +240,7 @@
         }
 
 
-
+        /* Edit Container */
         .editSearch {
             display: flex;
             flex-direction: column;
@@ -294,8 +303,9 @@
         .editPanel {
             width: 100%;
             height: 100%;
-            border: 1px solid #44b9fdff;
+            /* border: 1px solid #44b9fdff; */
             /* border-radius: 16px; */
+            padding: 0;
         }
 
         .editPanel #dateLabel {
@@ -305,7 +315,15 @@
             left: 0;
             float: left;
             text-align: left;
-            margin-top: 7px;
+            margin-top: 8px;
+
+        }
+
+        .dateSection {
+            position: relative;
+            width: 100%;
+            height: 40px;
+
         }
 
         .editPanel input[type="date"] {
@@ -326,10 +344,91 @@
         input[type="date"]::-webkit-calendar-picker-indicator {
             display: none;
         }
+
+        .newSearchCriteria {
+            display: flex;
+            flex-direction: row;
+
+            justify-content: flex-start;
+            width: 75%;
+            height: 36px;
+            margin-top: 8px;
+            padding: 4px 8px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.99);
+
+            color: #606060;
+            font-family: "Open Sans";
+            font-size: 14px;
+            font-weight: 600;
+
+        }
+
+        .searchIcon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+            background-color: transparent;
+            margin-top: 5px;
+        }
+
+
+        .inputContainer {
+            margin-left: 4px;
+            width: 100%;
+            right: 0 !important;
+            float: right;
+            height: 30px;
+            background-color: transparent;
+            border: none;
+            padding-top: 3px;
+            font-size: 16px;
+        }
+
+
+
+
+        .materail-symbols-rounded span {
+            font-size: 24px;
+            color: #606060;
+            padding-top: 240px;
+            left: 0;
+
+            text-align: center;
+
+        }
+
+        .cancelBtn {
+            margin-top: ;
+            right: 0;
+            float: right;
+            margin-top: -40px;
+            height: 36px;
+            margin-left: 94px;
+            background-color: transparent;
+
+        }
+
+        .cancelBtn button {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+            border: none;
+            color: #DA4949;
+            background-color: transparent;
+            font-size: 16px;
+            font-weight: 400;
+            cursor: pointer;
+            margin-right: 0px;
+        }
     </style>
 </head>
+<!-- getCurrentLocation -->
 
-<body onload="getCurrentLocation()">
+<body onload="openEditPanel();">
     <div class="nav">
         <span class="appName">Spread Rumor</span>
 
@@ -341,8 +440,8 @@
         <span
             style="background-color: #B9B9B9; width: 126px; height: 4px; border-radius: 4px; margin-bottom: 8px;"></span>
 
-        <div class="search" id="currentSearch" onclick="openEditPanel()">
-            <span class="current-location" id="currentLocation">Swargate, Pune, Maharashtra, India</span>
+        <div class="search" id="currentSearch" onclick="openEditPanel()" hidden>
+            <span class="current-location" id="currentLocation">Swargate, Pune</span>
 
             <span class="date-time" id="dateTime">
                 <span class="on" style="">on</span>
@@ -354,13 +453,36 @@
         <!-- Search area -->
         <div class="editSearch" id="editSearch">
             <div class="editPanel">
-                <label id="dateLabel">Date</label>
-                <input type="date" id="dateInput" name="dateInput" value="">
+                <div class="dateSection" style="border-bottom: none">
+                    <label id="dateLabel">Date</label>
+                    <input type="date" id="dateInput" name="dateInput" value="">
+                </div>
+                <br>
+                <label margin>Location</label>
+                <div>
+                    <div class="newSearchCriteria">
+                        <div class="searchIcon">
+                            <span class="material-symbols-rounded">
+                                search
+                            </span>
+                        </div>
+                        <input type="text" class="inputContainer" id="newSearchCriteria" name="newSearchCriteria"
+                            placeholder="Type here...">
+
+                    </div>
+                    <div class="cancelBtn">
+                        <button>
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+
             </div>
+
         </div>
 
         <!-- 
-              <img src="search.jpeg" alt="Drag Handle"
+        <img src="search.jpeg" alt="Drag Handle"
             style="margin-top: -63px; margin-bottom: 4px; width: 100%; z-index: 1000; !important;  pointer-events: none; opacity: 0.2;"> -->
 
 
