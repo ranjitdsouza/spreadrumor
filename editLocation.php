@@ -303,8 +303,6 @@
         .editPanel {
             width: 100%;
             height: 100%;
-            /* border: 1px solid #44b9fdff; */
-            /* border-radius: 16px; */
             padding: 0;
         }
 
@@ -316,7 +314,6 @@
             float: left;
             text-align: left;
             margin-top: 8px;
-
         }
 
         .dateSection {
@@ -327,7 +324,6 @@
         }
 
         .editPanel input[type="date"] {
-
             right: 0;
             float: right;
             border: 1px solid #ccc;
@@ -348,7 +344,6 @@
         .newSearchCriteria {
             display: flex;
             flex-direction: row;
-
             justify-content: flex-start;
             width: 75%;
             height: 36px;
@@ -356,7 +351,6 @@
             padding: 4px 8px;
             border-radius: 8px;
             background: rgba(255, 255, 255, 0.99);
-
             color: #606060;
             font-family: "Open Sans";
             font-size: 14px;
@@ -388,17 +382,15 @@
             font-size: 16px;
         }
 
-
-
+        .inputContainer:focus {
+            outline: none;
+        }
 
         .materail-symbols-rounded span {
-            font-size: 24px;
+            font-size: 20px;
             color: #606060;
-            padding-top: 240px;
             left: 0;
-
             text-align: center;
-
         }
 
         .cancelBtn {
@@ -409,7 +401,6 @@
             height: 36px;
             margin-left: 94px;
             background-color: transparent;
-
         }
 
         .cancelBtn button {
@@ -422,7 +413,28 @@
             font-size: 16px;
             font-weight: 400;
             cursor: pointer;
-            margin-right: 0px;
+        }
+
+        .submitBox {
+            width: 100%;
+            margin-top: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .submitBtn {
+            width: 50%;
+            height: 40px;
+            border-radius: 20px;
+            border: none;
+            outline: 3px solid #F6D9D5;
+            color: black;
+            background: linear-gradient(180deg, #f0f0f0 0%, #DBDBDB 100%);
+            box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+            font-size: 16px;
+            font-weight: 400;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -475,6 +487,10 @@
                             Cancel
                         </button>
                     </div>
+                </div>
+
+                <div class="submitBox">
+                    <button type="submit" class="submitBtn" onclick="submitEditLocation()">Scan</button>
                 </div>
 
             </div>
