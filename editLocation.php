@@ -341,11 +341,21 @@
             display: none;
         }
 
+        #locationLable {
+            font-size: 14px;
+            font-weight: 600;
+            color: #606060;
+            left: 0;
+            float: left;
+            text-align: left;
+            margin-bottom: 10px;
+        }
+
         .newSearchCriteria {
             display: flex;
             flex-direction: row;
             justify-content: flex-start;
-            width: 75%;
+            width: 78%;
             height: 36px;
             margin-top: 8px;
             padding: 4px 8px;
@@ -364,7 +374,7 @@
             justify-content: center;
             width: 24px;
             height: 24px;
-            margin-right: 8px;
+            margin-right: 3px;
             background-color: transparent;
             margin-top: 5px;
         }
@@ -401,6 +411,8 @@
             height: 36px;
             margin-left: 94px;
             background-color: transparent;
+            margin-right: -4px;
+
         }
 
         .cancelBtn button {
@@ -429,9 +441,9 @@
             border-radius: 20px;
             border: none;
             outline: 3px solid #F6D9D5;
-            color: black;
+            color: #5f5f5fff;
             background: linear-gradient(180deg, #f0f0f0 0%, #DBDBDB 100%);
-            box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+            box-shadow: rgba(204, 219, 232, 0.53) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
             font-size: 16px;
             font-weight: 400;
             cursor: pointer;
@@ -465,12 +477,12 @@
         <!-- Search area -->
         <div class="editSearch" id="editSearch">
             <div class="editPanel">
-                <div class="dateSection" style="border-bottom: none">
+                <div class="dateSection" style="border-bottom: 1px solid #262626ff; padding-bottom: 4px;">
                     <label id="dateLabel">Date</label>
                     <input type="date" id="dateInput" name="dateInput" value="">
                 </div>
                 <br>
-                <label margin>Location</label>
+                <label id="locationLable">Location</label>
                 <div>
                     <div class="newSearchCriteria">
                         <div class="searchIcon">
