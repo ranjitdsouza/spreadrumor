@@ -26,7 +26,9 @@
 
 <body onload="openEditPanel();">
     <div class="nav">
-        <span class="appName">Spread Rumor</span>
+        <span class="appName">
+            <img src="res/logo.svg" alt="Logo" class="logo">
+        </span>
     </div>
 
     <!-- Contains Map -->
