@@ -372,11 +372,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 24px;
-            height: 24px;
-            margin-right: 3px;
+            width: 22px;
+            height: 22px;
             background-color: transparent;
-            margin-top: 5px;
+            margin-top: 7px;
+            font-size: 12px !important;
         }
 
 
@@ -397,7 +397,7 @@
         }
 
         .materail-symbols-rounded span {
-            font-size: 20px;
+            font-size: 18px;
             color: #606060;
             left: 0;
             text-align: center;
