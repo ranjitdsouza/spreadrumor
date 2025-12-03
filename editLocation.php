@@ -47,19 +47,21 @@
 
         <!-- Height adjustable bar -->
         <!-- <img src="edit.jpeg" alt="Drag Handle"
-            style="margin-top: -5px; margin-bottom: 4px; width: 100%; z-index: 1 !important;  pointer-events: none; opacity: 0.5;"> -->
+            style="margin-top: 10px; margin-bottom: 4px; width: 100%; z-index: 1 !important;  pointer-events: none; opacity: 0.8;"> -->
 
 
         <!-- Search area -->
-        <!-- style="z-index: 1 !impportant; margin-top: -243px;"  -->
+        <!-- style="z-index: 1 !impportant; margin-top: -254px;"  -->
         <div class="editSearch" id="editSearch">
             <div class="editPanel">
-                <div class="dateSection" style="border-bottom: 1px solid #262626ff; padding-bottom: 4px;">
+                <div class="dateSection"
+                    style="border-bottom: 1px solid #BBB7B7; margin-bottom: 10px; padding-bottom: 5px;">
                     <label id="dateLabel">Date</label>
                     <input type="date" id="dateInput" name="dateInput" value="">
                 </div>
-                <!-- <div style="height: 1px;"></div> -->
-                <label id="locationLabel">Location</label>
+
+                <label class="locationLabel">Location</label>
+                <br>
                 <div style="margin-top: 18px;">
                     <div class="newSearchCriteria">
                         <div class="searchIcon">

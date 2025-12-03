@@ -318,15 +318,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     display: none;
 }
 
-#locationLable {
-    font-size: 12px;
+.locationLabel {
+    font-family: 'Open Sans', sans-serif !important;
+    font-size: 14px;
     font-weight: 600;
-    color: #0059ff;
+    color: #606060;
     left: 0;
     float: left;
     text-align: left;
-    font-family: 'Open Sans', sans-serif;
-    margin-top: 45px;
+
+
 }
 
 .newSearchCriteria {
@@ -342,7 +343,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     font-family: "Open Sans";
     font-size: 14px;
     font-weight: 600;
-
+    margin-top: -14px;
 }
 
 .searchIcon {
@@ -365,7 +366,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     height: 28px;
     background-color: transparent;
     border: none;
-
+    font-family: 'Open Sans', sans-serif !important;
     font-size: 16px;
 }
 
@@ -418,11 +419,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     width: 48%;
     height: 42px;
     border-radius: 40px;
-    border: none;
-    border: 3px solid #F6D9D5;
+
+    border: 3px solid #F7ECEB;
     color: #767676;
-    background: linear-gradient(0deg, rgba(240,240,240,0.50) 0%,  rgba(219,219,219,0.50) 100%);
-    box-shadow: -4px -4px 4px 0 rgba(255, 255, 255, 0.40) inset, 4px 4px 7px 0 rgba(0, 0, 0, 0.10) inset, -4px -4px 3.9px 0 rgba(255, 255, 255, 0.65), 4px 4px 10.3px 0 rgba(0, 0, 0, 0.22);    font-size: 16px;
+    background: linear-gradient(180deg, #EDE0DE 0%,  #F7F6F6 100%);
+
+    BOX-SHADOW: -4px -4px 3.9px 0 rgba(255, 255, 255, 0.432), 4px 4px 10.3px 0 rgba(0, 0, 0, 0.22);
+
+
     font-weight: 400;
     font-size: 14px;
     cursor: pointer;
