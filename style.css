@@ -6,7 +6,6 @@ body {
 
 .nav {
 
-  
     text-align: left;
     position: sticky;
     top: 0;
@@ -20,9 +19,7 @@ body {
     color: #5e51a5ff;
 }
 
-.nav .explore-btn {
-    float: right;
-}
+
 
 #map {
     position: absolute;
