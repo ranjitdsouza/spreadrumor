@@ -1,26 +1,664 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Styled Date Input</title>
-  <style>
-    input[type="date"] {
-      appearance: none; /* Removes default styling */
-      border: 2px solid #4CAF50;
-      border-radius: 5px;
-      padding: 10px;
-      font-size: 16px;
-      color: #333;
-    }
+<html>
 
-input[type="date"]::-webkit-calendar-picker-indicator {
-    display: none;
-}
-  </style>
+<head>
+    <meta charset="utf-8">
+    <title>User Location Map</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    
+    <!-- Material Icons -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+        rel="stylesheet">
+
+    <!-- Mapbox -->
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.17.0-beta.1/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.17.0-beta.1/mapbox-gl.js"></script>
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .nav {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 14px 10px;
+            z-index: 10;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.9), transparent);
+        }
+
+        .appName {
+            font-size: 1.5em;
+            font-weight: 900;
+            font-style: italic;
+            color: #5e51a5ff;
+        }
+
+        .bottom-box {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 0;
+            width: 99%;
+            height: auto;
+            max-height: 70%;
+            backdrop-filter: blur(6.4px);
+            border-radius: 32px 32px 0 0;
+            border: 1px solid #DADADA;
+            background: rgba(235, 235, 235, 0.95);
+            box-shadow: 0 -2px 12.6px 0 rgba(144, 144, 158, 0.50);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 8px 0;
+            z-index: 100;
+        }
+
+        .adjBar {
+            background-color: #B9B9B9;
+            width: 126px;
+            height: 4px;
+            border-radius: 4px;
+            margin: 0 auto 8px;
+        }
+
+        .search {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: calc(100% - 32px);
+            margin: 0 auto;
+            padding: 12px 20px;
+            border-radius: 54px;
+            background: rgba(226, 224, 224, 0.14);
+            box-shadow: -4px -4px 8.2px 0 #FFF, 4px 4px 19.1px 0 rgba(0, 0, 0, 0.22);
+            cursor: pointer;
+        }
+
+        .current-location {
+            font-size: 14px;
+            font-weight: 600;
+            color: #606060;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .date-time {
+            font-size: 14px;
+            font-weight: 600;
+            color: #606060;
+            flex-shrink: 0;
+            margin-left: 8px;
+        }
+
+        .on {
+            color: #4d4d4d;
+            font-weight: 400;
+            margin-right: 4px;
+        }
+
+        .editSearch {
+            display: none;
+            padding: 16px;
+            width: calc(100% - 32px);
+            margin: 0 auto;
+        }
+
+        .editPanel {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .dateSection {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        #dateLabel {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        #dateInput {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .locationLabel {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .newSearchCriteria {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .searchIcon {
+            margin-right: 8px;
+            color: #666;
+        }
+
+        .inputContainer {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            margin-top: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+
+        .suggestion-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.2s ease;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-item:hover {
+            background-color: #f5f5f5;
+        }
+
+        .suggestion-icon {
+            color: #5e51a5ff;
+            font-size: 24px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .suggestion-text {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .suggestion-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .suggestion-address {
+            font-size: 12px;
+            color: #666;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .cancelBtn button {
+            background: transparent;
+            border: 1px solid #999;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Open Sans', sans-serif;
+            color: #666;
+        }
+
+        .submitBox {
+            margin-top: 8px;
+        }
+
+        .submitBtn {
+            width: 100%;
+            background: #5e51a5ff;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .results {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 24px;
+            margin-top: 8px;
+        }
+
+        .aval-event {
+            font-size: 16px;
+            font-weight: 700;
+            color: black;
+        }
+
+        .result-count {
+            font-size: 14px;
+            font-weight: 500;
+            color: #606060;
+        }
+
+        .user-marker {
+            background: #1c52bdff;
+            border: 3px solid white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .user-marker::after {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            right: -8px;
+            bottom: -8px;
+            background: #4291e694;
+            border: 2px solid #5083e1ff;
+            border-radius: 70%;
+            animation: pulse-ring 2s infinite;
+            opacity: 0;
+            z-index: -1;
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.8);
+                opacity: 0.8;
+            }
+            80%, 100% {
+                transform: scale(1.9);
+                opacity: 0;
+            }
+        }
+
+        .location-status {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: rgba(26, 26, 26, 0.9);
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            z-index: 200;
+            display: none;
+        }
+
+        .location-status.show {
+            display: block;
+        }
+
+        .location-status.success {
+            background: rgba(76, 175, 80, 0.95);
+        }
+
+        .location-status.error {
+            background: rgba(244, 67, 54, 0.95);
+        }
+
+        .location-status.loading {
+            background: rgba(33, 150, 243, 0.95);
+        }
+
+        .mapboxgl-ctrl-logo,
+        .mapboxgl-ctrl-attrib {
+            display: none !important;
+        }
+    </style>
 </head>
+
 <body>
-  <label for="date">Select a date:</label>
-  <input type="date" id="date">
+    <div class="nav">
+        <span class="appName">Spread Rumor</span>
+    </div>
+
+    <div id="map"></div>
+
+    <div class="bottom-box" id="searchBox">
+        <span class="adjBar"></span>
+
+        <div class="search" id="currentSearch" onclick="openEditPanel()">
+            <span class="current-location" id="currentLocation">Finding location...</span>
+            <span class="date-time" id="dateTime"><span class="on">on</span> 12th Dec</span>
+        </div>
+
+        <div class="editSearch" id="editSearch">
+            <div class="editPanel">
+                <div class="dateSection">
+                    <label id="dateLabel" for="dateInput">Date</label>
+                    <input type="date" id="dateInput" name="dateInput">
+                </div>
+
+                <label class="locationLabel" for="newSearchCriteria">Location</label>
+                
+                <div class="newSearchCriteria">
+                    <div class="searchIcon">
+                        <span class="material-symbols-rounded">search</span>
+                    </div>
+                    <input type="text" class="inputContainer" id="newSearchCriteria" 
+                           placeholder="Search for a place...">
+                </div>
+
+                <div class="cancelBtn">
+                    <button onclick="closeEditPanel()">Cancel</button>
+                </div>
+
+                <div class="submitBox">
+                    <button type="submit" class="submitBtn" onclick="submitEditLocation()">Scan</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="results">
+            <span class="aval-event">Available Events</span>
+            <span class="result-count">10 Results</span>
+        </div>
+    </div>
+
+    <div class="location-status" id="locationStatus"></div>
+
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoicmFuaml0ZHNvdXphIiwiYSI6ImNtaWdzMXB0ZzAxNnMzZnIxeWh1dWEwaXcifQ.BgmVhDYzaRLB8LgXKNFqJQ';
+
+        let map, userMarker, watchId, searchTimeout;
+
+        window.onload = () => {
+            map = new mapboxgl.Map({
+                container: 'map',
+                zoom: 14,
+                center: [73.8567, 18.5204],
+                pitch: 45,
+                bearing: 0,
+                style: 'mapbox://styles/ranjitdsouza/cmijtzilg00lr01qwf2ri04jb'
+            });
+
+            map.on('load', () => {
+                console.log('Map loaded');
+                setTimeout(getUserLocation, 1000);
+            });
+
+            setCurrentDate();
+            setupSearchAutocomplete();
+        };
+
+        function setCurrentDate() {
+            const now = new Date();
+            const day = now.getDate();
+            const month = now.toLocaleString('en-US', { month: 'short' });
+            let suffix = 'th';
+            if ([1, 21, 31].includes(day)) suffix = 'st';
+            else if ([2, 22].includes(day)) suffix = 'nd';
+            else if ([3, 23].includes(day)) suffix = 'rd';
+            
+            document.getElementById('dateTime').innerHTML = `<span class="on">on</span> ${day}${suffix} ${month}`;
+            document.getElementById('dateInput').value = now.toISOString().split('T')[0];
+        }
+
+        function getUserLocation() {
+            if (!navigator.geolocation) {
+                showStatus('Geolocation not supported', 'error');
+                return;
+            }
+
+            showStatus('Getting location...', 'loading');
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { longitude, latitude, accuracy } = position.coords;
+                    console.log('Location found:', latitude, longitude);
+                    showStatus(`Location found (±${Math.round(accuracy)}m)`, 'success');
+                    
+                    updateLocationText(latitude, longitude);
+                    updateUserMarker(longitude, latitude);
+                    
+                    map.flyTo({
+                        center: [longitude, latitude - 0.003],
+                        zoom: 16,
+                        pitch: 45,
+                        duration: 2000
+                    });
+                    
+                    startTracking();
+                },
+                (error) => {
+                    console.error('Location error:', error);
+                    showStatus('Location unavailable', 'error');
+                }
+            );
+        }
+
+        function updateLocationText(lat, lng) {
+            const el = document.getElementById('currentLocation');
+            el.textContent = 'Locating...';
+
+            fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?types=neighborhood,locality,place,poi&access_token=${mapboxgl.accessToken}`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.features && data.features.length > 0) {
+                        const feature = data.features[0];
+                        let name = feature.text;
+                        const context = feature.context || [];
+                        const city = context.find(c => c.id.startsWith('place'));
+                        if (city && city.text !== name) name += ', ' + city.text;
+                        el.textContent = name;
+                    } else {
+                        el.textContent = 'Unknown Location';
+                    }
+                })
+                .catch(() => el.textContent = 'Location Error');
+        }
+
+        function setupSearchAutocomplete() {
+            const input = document.getElementById('newSearchCriteria');
+            const container = document.createElement('div');
+            container.id = 'searchSuggestions';
+            container.className = 'search-suggestions';
+            input.parentElement.appendChild(container);
+
+            input.addEventListener('input', (e) => {
+                const query = e.target.value.trim();
+                clearTimeout(searchTimeout);
+                
+                if (query.length < 2) {
+                    hideSuggestions();
+                    return;
+                }
+                
+                searchTimeout = setTimeout(() => searchPlaces(query), 300);
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!input.contains(e.target) && !container.contains(e.target)) {
+                    hideSuggestions();
+                }
+            });
+        }
+
+        function searchPlaces(query) {
+            let proximity = '';
+            if (userMarker) {
+                const { lng, lat } = userMarker.getLngLat();
+                proximity = `&proximity=${lng},${lat}`;
+            }
+
+            fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?access_token=${mapboxgl.accessToken}&limit=5${proximity}`)
+                .then(r => r.json())
+                .then(data => displaySuggestions(data.features))
+                .catch(console.error);
+        }
+
+        function displaySuggestions(features) {
+            const container = document.getElementById('searchSuggestions');
+            
+            if (!features || features.length === 0) {
+                hideSuggestions();
+                return;
+            }
+
+            container.innerHTML = '';
+
+            features.forEach(feature => {
+                const item = document.createElement('div');
+                item.className = 'suggestion-item';
+                
+                item.innerHTML = `
+                    <span class="suggestion-icon material-symbols-rounded">place</span>
+                    <div class="suggestion-text">
+                        <div class="suggestion-name">${feature.text}</div>
+                        <div class="suggestion-address">${feature.place_name.replace(feature.text + ', ', '')}</div>
+                    </div>
+                `;
+                
+                item.onclick = () => selectPlace(feature);
+                container.appendChild(item);
+            });
+
+            container.style.display = 'block';
+        }
+
+        function selectPlace(feature) {
+            const input = document.getElementById('newSearchCriteria');
+            const location = document.getElementById('currentLocation');
+            
+            input.value = feature.place_name;
+            
+            let name = feature.text;
+            if (feature.context && feature.context[0]) {
+                name += ', ' + feature.context[0].text;
+            }
+            location.textContent = name;
+            
+            const [lng, lat] = feature.center;
+            updateUserMarker(lng, lat);
+            
+            map.flyTo({
+                center: [lng, lat - 0.003],
+                zoom: 16,
+                pitch: 45,
+                duration: 2000
+            });
+            
+            hideSuggestions();
+            closeEditPanel();
+        }
+
+        function hideSuggestions() {
+            const container = document.getElementById('searchSuggestions');
+            if (container) container.style.display = 'none';
+        }
+
+        function updateUserMarker(lng, lat) {
+            if (userMarker) userMarker.remove();
+            
+            const el = document.createElement('div');
+            el.className = 'user-marker';
+            
+            userMarker = new mapboxgl.Marker({ element: el, anchor: 'center' })
+                .setLngLat([lng, lat])
+                .addTo(map);
+        }
+
+        function startTracking() {
+            if (watchId) navigator.geolocation.clearWatch(watchId);
+            
+            watchId = navigator.geolocation.watchPosition(
+                (position) => {
+                    const { longitude, latitude } = position.coords;
+                    if (userMarker) {
+                        userMarker.setLngLat([longitude, latitude]);
+                        map.easeTo({ center: [longitude, latitude - 0.003], duration: 1000 });
+                        updateLocationText(latitude, longitude);
+                    }
+                },
+                console.error
+            );
+        }
+
+        function showStatus(msg, type = 'info') {
+            const el = document.getElementById('locationStatus');
+            if (!el) return;
+            el.textContent = msg;
+            el.className = `location-status show ${type}`;
+            if (type === 'success') setTimeout(() => el.classList.remove('show'), 3000);
+        }
+
+        function openEditPanel() {
+            document.getElementById('currentSearch').style.display = 'none';
+            document.getElementById('editSearch').style.display = 'block';
+            document.getElementById('newSearchCriteria').focus();
+        }
+
+        function closeEditPanel() {
+            document.getElementById('currentSearch').style.display = 'flex';
+            document.getElementById('editSearch').style.display = 'none';
+            clearSearchBar();
+        }
+
+        function clearSearchBar() {
+            document.getElementById('newSearchCriteria').value = '';
+            hideSuggestions();
+        }
+
+        function submitEditLocation() {
+            const value = document.getElementById('newSearchCriteria').value.trim();
+            if (value) searchPlaces(value);
+        }
+
+        window.addEventListener('beforeunload', () => {
+            if (watchId) navigator.geolocation.clearWatch(watchId);
+        });
+    </script>
 </body>
 </html>

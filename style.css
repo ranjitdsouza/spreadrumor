@@ -4,6 +4,16 @@ body {
     font-family: 'Open Sans', sans-serif !important;
 }
 
+
+   .material-symbols-rounded {
+      font-variation-settings:
+        'FILL' 0,   /* 0 = outline, 1 = filled */
+        'wght' 400, /* weight */
+        'GRAD' 0,   /* grade */
+        'opsz' 48;  /* optical size */
+
+    }
+
 .nav {
 
     text-align: left;
@@ -28,6 +38,9 @@ body {
     width: 100%;
 }
 
+
+
+/* Blue User Marker (GPS Location - stays fixed) */
 .user-marker {
     background: #1c52bdff;
     border: 3px solid white;
@@ -54,21 +67,66 @@ body {
     z-index: -1;
 }
 
+/* Red Search Marker (Selected Search Location) */
+.search-marker {
+    background: transparent;
+    border: 3px solid white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+    position: relative;
+    cursor: pointer;
+}
+
+.search-marker::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+}
+
+.search-marker::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    background: rgba(255, 68, 68, 0.3);
+    border: 2px solid #ff6666;
+    border-radius: 70%;
+    animation: pulse-ring-red 2s infinite;
+    opacity: 0;
+    z-index: -1;
+}
+
 @keyframes pulse-ring {
     0% {
-transform: scale(0.8);
-opacity: 0.8;
+        transform: scale(0.8);
+        opacity: 0.8;
     }
-
-    80%,
-    100% {
-transform: scale(1.9);
-opacity: 0;
+    80%, 100% {
+        transform: scale(1.9);
+        opacity: 0;
     }
 }
 
-
-
+@keyframes pulse-ring-red {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.8;
+    }
+    80%, 100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
 .location-status {
     position: absolute;
     top: 80px;
@@ -100,9 +158,6 @@ opacity: 0;
     background: rgba(33, 150, 243, 0.95);
 }
 
-
-
-
 .bottom-box {
     position: absolute;
     left: 50%;
@@ -123,6 +178,14 @@ opacity: 0;
     overflow: hidden;
 }
 
+.adjBar {
+    cursor: ns-resize;
+    background-color: #B9B9B9; 
+    width: 126px; 
+    height: 4px; 
+    border-radius: 4px; 
+    margin-bottom: 8px;
+}
 .search {
     display: flex;
     flex-direction: row;
@@ -154,7 +217,6 @@ opacity: 0;
     color: #606060;
     flex: 1;
     max-width: 72%;
-
 }
 
 
@@ -176,7 +238,6 @@ opacity: 0;
     font-weight: 600;
     color: #606060;
     flex-shrink: 0;
-
 }
 
 .results {
@@ -208,8 +269,8 @@ opacity: 0;
 .mapboxgl-ctrl-attrib,
 .mapboxgl-ctrl-compass,
 .mapboxgl-ctrl-zoom-in,
-.mapboxgl-ctrl-zoom-out,
-.mapboxgl-ctrl-geolocate {
+.mapboxgl-ctrl-zoom-out
+ {
     display: none !important;
 }
 
@@ -226,11 +287,7 @@ opacity: 0;
     background: rgba(228, 228, 228, 0.15);
     box-shadow: -4px -4px 8px 0 #FFF, 4px 4px 19px 0 rgba(255, 42, 0, 0.20);
     color: #606060;
-    /* border: 1px solid orange; */
     font-family: "Open Sans";
-    /* font-size: 14px; */
-    /* font-weight: 600; */
-
     margin: auto;
     margin-top: -5px;
     display: none;
@@ -238,14 +295,12 @@ opacity: 0;
 
 @keyframes slideDownExpand {
     from {
-
 opacity: 0;
 max-height: 0;
 margin-top: 61px;
     }
 
     to {
-
 opacity: 1;
 max-height: 300px;
     }
@@ -294,7 +349,9 @@ max-height: 0;
     position: relative;
     width: 100%;
     height: 40px;
-
+    border-bottom: 1px solid #BBB7B7; 
+    margin-bottom: 10px; 
+    padding-bottom: 5px;
 }
 
 .editPanel input[type="date"] {
@@ -323,15 +380,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     left: 0;
     float: left;
     text-align: left;
-
-
 }
 
 .newSearchCriteria {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    width: 77%;
+    width: 76%;
     height: 26px;
     padding: 4px 8px;
     border-radius: 8px;
@@ -382,7 +437,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .cancelBtn {    
     right: 0;
     float: right;
-    margin-top: -33px;
+    margin-top: -35px;
     height: 36px;
     background-color: transparent;
     margin-right: -8px;
@@ -413,14 +468,190 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     width: 48%;
     height: 42px;
     border-radius: 40px;
-
     border: none;
-background: linear-gradient(180deg, #EEE 0%, #FFF 100%);
-box-shadow: -4px -4px 3.9px 0 rgba(255, 255, 255, 0.65), 4px 4px 10.3px 0 #E4CBCC;
+    background: linear-gradient(180deg, #EEE 0%, #FFF 100%);
+    box-shadow: -4px -4px 3.9px 0 rgba(255, 255, 255, 0.65), 4px 4px 10.3px 0 #E4CBCC;
     margin-top: 8px;
     font-family: 'Open Sans', sans-serif !important;
     color: #767676;
     font-size: 14px;
     font-weight: 400;
     cursor: pointer;
+}
+
+
+
+/* TEMPORARY DEBUG - Remove after testing */
+
+
+
+/* ========================================
+   SEARCH SUGGESTIONS - ADD TO style.css
+   ======================================== */
+
+/* Search Suggestions Container */
+.search-suggestions {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    margin-top: 4px;
+    max-height: 280px;
+    overflow-y: auto;
+    z-index: 9999 !important;;
+    display: none;
+}
+
+/* Individual Suggestion Item */
+.suggestion-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 14px;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+    transition: all 0.2s ease;
+    background: white;
+}
+
+.suggestion-item:first-child {
+    border-radius: 12px 12px 0 0;
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+    border-radius: 0 0 12px 12px;
+}
+
+.suggestion-item:hover {
+    background-color: #f8f8f8;
+    transform: translateX(2px);
+}
+
+.suggestion-item:active {
+    background-color: #efefef;
+}
+
+/* Suggestion Icon */
+.suggestion-icon {
+    color: #5e51a5ff;
+    font-size: 22px;
+    margin-right: 10px;
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Suggestion Text Container */
+.suggestion-text {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+/* Suggestion Name (Main text) */
+.suggestion-name {
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: 'Open Sans', sans-serif;
+}
+
+/* Suggestion Address (Subtitle) */
+.suggestion-address {
+    font-size: 12px;
+    color: #888;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: 'Open Sans', sans-serif;
+}
+
+/* Scrollbar Styling for Suggestions */
+.search-suggestions::-webkit-scrollbar {
+    width: 5px;
+}
+
+.search-suggestions::-webkit-scrollbar-track {
+    background: #f5f5f5;
+    border-radius: 10px;
+}
+
+.search-suggestions::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+.search-suggestions::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+}
+
+/* Loading State (Optional) */
+.search-suggestions.loading {
+    padding: 20px;
+    text-align: center;
+    color: #888;
+    font-size: 14px;
+}
+
+.search-suggestions.loading::before {
+    content: 'Searching...';
+}
+
+/* Empty State (Optional) */
+.search-suggestions.empty {
+    padding: 20px;
+    text-align: center;
+    color: #999;
+    font-size: 14px;
+}
+
+.search-suggestions.empty::before {
+    content: 'No results found';
+}
+
+/* Animation for showing suggestions */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.search-suggestions[style*="display: block"] {
+    animation: slideDown 0.2s ease-out;
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+    .suggestion-item {
+        padding: 10px 12px;
+    }
+    
+    .suggestion-name {
+        font-size: 13px;
+    }
+    
+    .suggestion-address {
+        font-size: 11px;
+    }
+    
+    .suggestion-icon {
+        font-size: 20px;
+        margin-right: 8px;
+    }
 }
